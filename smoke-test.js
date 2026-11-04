@@ -275,10 +275,10 @@ const cback = T.parseMermaid(cc);
 ok('兼容代码可反向解析', cback.tasks.length === 15, '实际 ' + cback.tasks.length);
 setStyle({ compat: false });
 
-console.log('\n[12] 用户真实模板（BOS 钢铁蓝）');
+console.log('\n[12] 通用复杂模板');
 const TEMPLATE = `%%{init: {"themeCSS": ".grid .tick line{stroke:#B8B8B8;stroke-width:1.8px;stroke-dasharray:3 3;}.task{stroke-width:1.5px;}.taskText{transform:translateX(8px);}"} }%%
 gantt
-    title BOS钢铁蓝 Mini 款定制项目
+    title 示例定制项目
     dateFormat YYYY-MM-DD
     axisFormat %d
     excludes weekends
@@ -318,7 +318,7 @@ gantt
 
 const tp = T.parseMermaid(TEMPLATE);
 ok('解析出 19 个任务', tp.tasks.length === 19, '实际 ' + tp.tasks.length);
-ok('标题正确', tp.title === 'BOS钢铁蓝 Mini 款定制项目', tp.title);
+ok('标题正确', tp.title === '示例定制项目', tp.title);
 ok('识别 6 个 section', new Set(tp.tasks.map(t => t.section)).size === 6,
    [...new Set(tp.tasks.map(t => t.section))].join('/'));
 ok('themeCSS 网格线解析', tp.cfg.gridStyle === 'dash' && tp.cfg.gridColor === '#B8B8B8' && tp.cfg.gridWidth === 1.8,

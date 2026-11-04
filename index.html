@@ -643,7 +643,7 @@ fieldset input[type=checkbox]{width:auto; accent-color:var(--acc)}
   <div class="nd-head" data-page-node-id="nH4B7mLpL0qR3sT6uV9wXz">
     <div class="nd-title" data-page-node-id="nT5B8mLqL1qR4sT7uV0wXA"><span class="nd-ico" data-page-node-id="nI6B9mLrL2qR5sT8uV1wXB"></span><b data-page-node-id="nB0B1mLsL3qR6sT9uV2wXC">任务备注</b><span id="notesCount" class="nd-count" data-page-node-id="nC1B2mLtL4qR7sT0uV3wXD">0</span></div>
     <div class="nd-tools" data-page-node-id="nT2B3mLuL5qR8sT1uV4wXE">
-      <button id="btnCopyAllNotes" class="ghost" title="复制待办清单（含任务起止日期与备注原文），可直接贴给 WorkBuddy 挂待办" data-page-node-id="nC3B4mLvL6qR9sT2uV5wXF">复制清单</button>
+      <button id="btnCopyAllNotes" class="ghost" title="复制待办清单（含任务起止日期与备注原文），可粘贴到其他待办工具" data-page-node-id="nC3B4mLvL6qR9sT2uV5wXF">复制清单</button>
       <button id="btnDownloadNotes" class="ghost" title="下载待办清单为 .txt 文件" data-page-node-id="nD4B5mLwL7qR0sT3uV6wXG">下载 .txt</button>
       <button id="btnCloseNotes" class="nd-close" title="关闭备注面板（Esc）" aria-label="关闭" data-page-node-id="nX5B6mLxL8qR1sT4uV7wXH">×</button>
     </div>
@@ -833,7 +833,7 @@ fieldset input[type=checkbox]{width:auto; accent-color:var(--acc)}
     <h3 data-page-node-id="TbVP1ryCldq2QHZlbdCUVi">新建项目</h3>
     <p data-page-node-id="1PPp9LEJARxW8vvBRqeUwD">为新的排期起个名字，项目之间相互独立、随时切换。</p>
     <div class="np-field" data-page-node-id="DkLWEyQUPoJPnOo8QX3VWl">
-      <input id="npName" type="text" placeholder="例如：BOS 钢铁蓝 mini 款定制排期" maxlength="40" spellcheck="false" data-page-node-id="iDF0GjiD3PdlsgB29mMKac">
+      <input id="npName" type="text" placeholder="例如：新产品开发排期" maxlength="40" spellcheck="false" data-page-node-id="iDF0GjiD3PdlsgB29mMKac">
     </div>
     <label class="ck np-copy" data-page-node-id="4sNyy9SnIZdiszQjGgzgDa"><input type="checkbox" id="npCopy" data-page-node-id="k3Oq0yFkfzIyCCesPZ7hJ2"> 复制当前项目的任务与样式设置</label>
     <div class="modal-acts" data-page-node-id="gXTpuBYQOO1GDMBW8tvpVD">
@@ -893,7 +893,7 @@ fieldset input[type=checkbox]{width:auto; accent-color:var(--acc)}
     <h3 data-page-node-id="cF8MlGtyrHW6t83B6uR1Bi">任务备注</h3>
     <p data-page-node-id="a7qxyrAM7I3P9ZUdzlK6tE">记录开会时与这条任务一起确定的结论、变更或待办。备注只保存在本机，用于展示时随记随存，<b data-page-node-id="dmYVQ4NGunpambfThpSUuF">不会</b>写进复制的 Mermaid 代码。</p>
     <div class="nt-chip" id="ntTask" data-page-node-id="9rE7R7FHbuUqYSRNHdnWdL"></div>
-    <textarea id="ntText" placeholder="例：9/15 会议：模厂反馈钢材 0.5mm 需改 0.6mm，开模顺延 2 天，已同步采购…" spellcheck="false"></textarea>
+    <textarea id="ntText" placeholder="例：9/15 会议：方案需要调整，任务顺延 2 天，已同步相关负责人…" spellcheck="false"></textarea>
     <div class="nt-tip" data-page-node-id="Nkzxf2lfqObzQkVBw7eE1E">Ctrl / ⌘ + Enter 保存 · Esc 关闭</div>
     <div class="modal-acts" data-page-node-id="JidjEGAHs0CtIvm9uPWqea">
       <button id="ntClear" class="danger-ghost" style="display:none" data-page-node-id="AEjqB4fChPFqAL4yOfSk7O">清除备注</button>
@@ -1916,7 +1916,7 @@ function notesPlainText(){
     return body ? head + body : head;
   }).join('\n');
 }
-/* 中文待办清单：编号 + 任务名 + 起止 + 负责人 + 原样备注（不解析/推算任何提醒日期），便于贴给 WorkBuddy 挂待办 */
+/* 中文待办清单：编号 + 任务名 + 起止 + 负责人 + 原样备注（不解析/推算任何提醒日期），便于粘贴到其他待办工具 */
 function notesTodoText(){
   const items = notesItemsData();
   if(!items.length) return '';
