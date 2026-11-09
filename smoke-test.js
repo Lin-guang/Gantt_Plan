@@ -118,6 +118,17 @@ ok('首行为 init themeCSS', /^%%\{init: \{"themeCSS": ".+"\} \}%%$/.test(code.
 ok('themeCSS 含网格线样式', /\.grid \.tick line\{stroke:#B8B8B8;stroke-width:1\.8px;stroke-dasharray:3 3;\}/.test(code));
 ok('themeCSS 含任务描边', /\.task\{stroke-width:1\.5px;\}/.test(code));
 ok('themeCSS 含 taskText 偏移', /\.taskText\{transform:translateX\(8px\);\}/.test(code));
+
+const groupedState = T.getState();
+groupedState.tasks[0].group = '包材线';
+groupedState.tasks[1].group = '包材线';
+groupedState.groupColors = {'包材线':'#b7791f'};
+const groupedCode = T.genMermaid();
+const groupedSelector = '#' + groupedState.tasks[0].id + ',#' + groupedState.tasks[1].id + '{stroke:#b7791f!important;stroke-width:4px!important;}';
+ok('计划分组边框写入 Mermaid themeCSS', groupedCode.includes(groupedSelector), groupedCode.split('\n')[0]);
+groupedState.tasks[0].group = '';
+groupedState.tasks[1].group = '';
+groupedState.groupColors = {};
 ok('含 tickInterval', /\n {4}tickInterval (1day|1week|1month)\n/.test(code), '实际: ' + (code.match(/tickInterval [^\n]*/) || [])[0]);
 ok('含 todayMarker', /todayMarker stroke-width:2px,stroke:#FF6B6B,dasharray:4 4/.test(code));
 ok('含 excludes weekends', /excludes weekends/.test(code));

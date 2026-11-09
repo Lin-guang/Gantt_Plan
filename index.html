@@ -818,7 +818,7 @@ fieldset input[type=checkbox]{width:auto; accent-color:var(--acc)}
         <label data-page-node-id="ge6mmC6GsKlQ1HB8HvVRKD">兼容模式 <input type="checkbox" id="s_compat" data-page-node-id="dqz8uewhcRytDqD7fOYwEF"></label>
       </fieldset>
     </div>
-    <div class="snote" data-page-node-id="TiMR80frAdW9iFSz5t20g7">排除周末：钉钉渲染时会压缩周末列。甘特图上方的「负责人」「日期」会直接写进 Mermaid 任务名，预览与复制代码同步生效。兼容模式：不输出 done/active/crit 标签与 themeCSS，依赖转成绝对日期。时间轴刻度严格按这里的手动选择输出。</div>
+    <div class="snote" data-page-node-id="TiMR80frAdW9iFSz5t20g7">排除周末：钉钉渲染时会压缩周末列。甘特图上方的「负责人」「日期」会直接写进 Mermaid 任务名；计划分组边框也会写进复制代码。兼容模式：不输出 done/active/crit 标签与 themeCSS，因此不显示分组边框，依赖转成绝对日期。时间轴刻度严格按这里的手动选择输出。</div>
     <div class="modal-acts" data-page-node-id="vINX3gtIa0dGIYgGa1aO2B">
       <button id="sReset" data-page-node-id="SOva6wESEo0lMWWKB0obmX">恢复默认</button>
       <button id="sCancel" data-page-node-id="C9qSdfZ3FdEBcGQnUlDtSt">取消</button>
@@ -2464,7 +2464,25 @@ function renderPreview(){
 
 /* ---------- 生成 Mermaid ---------- */
 function cleanName(n){ return String(n||'任务').replace(/[:：]/g,'：').replace(/,/g,'，').replace(/\s+/g,' ').trim() || '任务'; }
-function buildThemeCSS(){
+function mermaidTaskSelector(id){
+  const value = String(id || '').trim();
+  if(/^[A-Za-z_\u0080-\uFFFF][A-Za-z0-9_\-\u0080-\uFFFF]*$/.test(value)) return '#' + value;
+  return '[id="' + value.replace(/\\/g,'\\\\').replace(/"/g,'\\"') + '"]';
+}
+function buildGroupThemeCSS(tasks){
+  const byColor = {};
+  (Array.isArray(tasks) ? tasks : state.tasks).forEach(task => {
+    const group = groupName(task);
+    if(!group || !task.id) return;
+    const color = groupColor(group);
+    if(!byColor[color]) byColor[color] = [];
+    byColor[color].push(mermaidTaskSelector(task.id));
+  });
+  return Object.keys(byColor).map(color =>
+    byColor[color].join(',') + '{stroke:' + color + '!important;stroke-width:4px!important;}'
+  ).join('');
+}
+function buildThemeCSS(tasks){
   const S = state.style, p = [];
   if(S.gridStyle !== 'none'){
     const dash = dashOf(S);
@@ -2473,12 +2491,14 @@ function buildThemeCSS(){
   if(S.taskStroke > 0) p.push('.task{stroke-width:' + S.taskStroke + 'px;}');
   if(S.taskText === 'left') p.push('.taskText{display:none;}');
   else p.push('.taskText{transform:translateX(' + S.taskTextOffset + 'px);}');
+  const groupCSS = buildGroupThemeCSS(tasks);
+  if(groupCSS) p.push(groupCSS);
   return p.join('');
 }
 function genMermaid(tasksOverride, forceAbsolute){
   const S = state.style;
   const tasks = Array.isArray(tasksOverride) ? tasksOverride : state.tasks;
-  const css = S.compat ? '' : buildThemeCSS();
+  const css = S.compat ? '' : buildThemeCSS(tasks);
   const L = [];
   if(css) L.push('%%{init: {"themeCSS": "' + css + '"} }%%');
   L.push('gantt');
